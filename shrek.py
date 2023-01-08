@@ -46,8 +46,8 @@ class Program:
 
     for line in lines:
       # Formatting
-      line.replace('(', '_(')
-      line.replace(')', ')_')
+      line = line.replace('(', '_(')
+      line = line.replace(')', ')_')
 
       if line != '' and line.upper() == line:
         line = f'**{line}**'
