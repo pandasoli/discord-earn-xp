@@ -19,8 +19,7 @@ class Program:
     with open('movie-script.json', 'r') as f:
       self.lines = json.load(f)
 
-    for line in self.lines:
-      self.chlen += len(line)
+    self.chlen = sum(len(line) for line in self.lines)
 
   def run(self):
     gui.write('+profile', interval = 0.08)
