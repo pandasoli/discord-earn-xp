@@ -9,9 +9,9 @@ O bot pode ser um pouco lento porque o Discord abre uma janela
 de confirmação quando você envia mensagens muito rapidamente.
 
 ### Redimentos
-| Bot     | Tempo | Quantidade de xp
-|:-------:| ----- | -----------------
-| Loritta | 32m   | ~5.990
+| Bot     | Quantidade de xp
+|:-------:| -----------------
+| Loritta | ~5.990
 
 ### Dependencias
 | Package   | Versão
