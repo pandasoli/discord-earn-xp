@@ -5,7 +5,8 @@ from program import Program
 
 props = {
   'countdown': 5,
-  'ex-bot': 'loritta'
+  'ex-bot': 'loritta',
+  'anti-spam': ''
 }
 
 def main(argv: list[str], argc: int):

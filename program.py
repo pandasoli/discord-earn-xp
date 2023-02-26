@@ -39,28 +39,37 @@ class Program:
     if file != None: self.bot = yaml.safe_load(file)
     else: return print(err)
 
+    if props['anti-spam']:
+      err, file = openf(f"anti-spam/{props['anti-spam']}.yml")
+
+      if file != None:
+        self.spam = yaml.safe_load(file)
+
+        self.spam['msg time'] |= 0
+      else: return print(err)
+
     self.chlen = sum(len(line) for line in self.lines)
 
   def run(self):
-    gui.write(self.bot['get profile'], interval = 0.08)
-    gui.press('enter')
+    self.send(self.bot['get profile'])
 
     for i, line in enumerate(self.lines):
       self.print(i)
-      self.write(line, i)
-      sleep(1.5)
+      self.send(line, i)
+      sleep(self.spam['msg time'] or 1.5)
 
-    gui.write(self.bot['get profile'], interval = 0.08)
-    gui.press('enter')
-    sleep(5)
-    gui.write(self.bot['get rank'], interval = 0.08)
-    gui.press('enter')
+    self.send(self.bot['get profile'])
+    self.send(self.bot['get rank'])
 
   def print(self, i: int):
     per = self.passedchs / self.chlen * 100
     print(f'{i} of {len(self.lines)} lines, it means {per:.3}%        ', end = '\r')
 
-  def write(self, txt: str, linei: int):
+  def send(self, text: str, linei: int = -1):
+    self.write(text, linei)
+    gui.press('enter')
+
+  def write(self, txt: str, linei: int = -1):
     lines = txt.split('\n')
 
     for line in lines:
@@ -72,12 +81,12 @@ class Program:
         line = f'**{line}**'
 
       # Printing percentage
-      self.passedchs += len(line)
-      self.print(linei)
+      if linei == -1:
+        self.passedchs += len(line)
+        self.print(linei)
 
       # Writing
       pyperclip.copy(line + '\n')
       gui.hotkey('ctrl', 'v')
-      sleep(0.05)
 
-    gui.press('enter')
+      sleep(0.05)
