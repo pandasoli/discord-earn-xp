@@ -21,26 +21,27 @@ class Program:
   lines: list[str]
   chlen: int
   passedchs: int
-  props: dict
-  bot: dict
+  props = {}
+  bot = {}
+  spam = {}
 
   def __init__(self, props: dict):
     self.chlen = 0
     self.passedchs = 0
     self.props = props
 
-    err, file = openf(f"texts/{props['text']}.json")
+    err, file = openf(f"texts/{props.get('text')}.json")
 
     if file != None: self.lines = json.load(file)
     else: return print(err)
 
-    err, file = openf(f"ex-bots/{props['ex-bot']}.yml")
+    err, file = openf(f"ex-bots/{props.get('ex-bot')}.yml")
 
     if file != None: self.bot = yaml.safe_load(file)
     else: return print(err)
 
-    if props['anti-spam']:
-      err, file = openf(f"anti-spam/{props['anti-spam']}.yml")
+    if props.get('anti-spam'):
+      err, file = openf(f"anti-spam/{props.get('anti-spam')}.yml")
 
       if file != None:
         self.spam = yaml.safe_load(file)
@@ -51,15 +52,15 @@ class Program:
     self.chlen = sum(len(line) for line in self.lines)
 
   def run(self):
-    self.send(self.bot['get profile'])
+    self.send(self.bot.get('get profile') or '')
 
     for i, line in enumerate(self.lines):
       self.print(i)
       self.send(line, i)
-      sleep(self.spam['msg time'] or 1.5)
+      sleep(self.spam.get('msg time') or 1.5)
 
-    self.send(self.bot['get profile'])
-    self.send(self.bot['get rank'])
+    self.send(self.bot.get('get profile') or '')
+    self.send(self.bot.get('get rank') or '')
 
   def print(self, i: int):
     per = self.passedchs / self.chlen * 100
@@ -81,7 +82,7 @@ class Program:
         line = f'**{line}**'
 
       # Printing percentage
-      if linei == -1:
+      if linei > -1:
         self.passedchs += len(line)
         self.print(linei)
 
